@@ -1,19 +1,23 @@
+"""Flask web server for emotion detection analysis."""
+
 from flask import Flask, request, render_template
 from EmotionDetection.emotion_detection import emotion_detector
 
-app = Flask("Emotion Detector")
+APP = Flask("Emotion Detector")
 
-@app.route("/emotionDetector")
+
+@APP.route("/emotionDetector")
 def sent_analyzer():
-    text_to_analyze = request.args.get('textToAnalyze')
+    """Analyze emotion for text passed in the query string."""
+    text_to_analyze = request.args.get("textToAnalyze")
     response = emotion_detector(text_to_analyze)
 
-    anger = response['anger']
-    disgust = response['disgust']
-    fear = response['fear']
-    joy = response['joy']
-    sadness = response['sadness']
-    dominant_emotion = response['dominant_emotion']
+    anger = response["anger"]
+    disgust = response["disgust"]
+    fear = response["fear"]
+    joy = response["joy"]
+    sadness = response["sadness"]
+    dominant_emotion = response["dominant_emotion"]
 
     if dominant_emotion is None:
         return "Invalid text! Please try again!"
@@ -24,9 +28,12 @@ def sent_analyzer():
         f"'sadness': {sadness}. The dominant emotion is {dominant_emotion}."
     )
 
-@app.route("/")
+
+@APP.route("/")
 def render_index_page():
-    return render_template('index.html')
+    """Render the main application index page."""
+    return render_template("index.html")
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    APP.run(host="0.0.0.0", port=5000)
